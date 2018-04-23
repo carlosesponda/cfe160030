@@ -1,2 +1,3 @@
 # cfe160030
-for homework 6
+Now have created a clone directory in cslinux1
+
