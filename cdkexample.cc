@@ -7,16 +7,28 @@
  */
 
 #include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <stdint.h>
+#include <stdio.h>
 #include "cdk.h"
 
 
-#define MATRIX_WIDTH 4
-#define MATRIX_HEIGHT 3
-#define BOX_WIDTH 15
+#define MATRIX_WIDTH 3
+#define MATRIX_HEIGHT 5
+#define BOX_WIDTH 20
 #define MATRIX_NAME_STRING "Test Matrix"
 
 using namespace std;
 
+class BinaryFileHeader
+{
+public:
+
+  uint32_t magicNumber;
+  uint32_t versionNumber;
+  uint64_t numRecords;
+};
 
 int main()
 {
@@ -33,8 +45,8 @@ int main()
   // values you choose to set for MATRIX_WIDTH and MATRIX_HEIGHT
   // above.
 
-  const char 		*rowTitles[] = {"R0", "R1", "R2", "R3", "R4", "R5"};
-  const char 		*columnTitles[] = {"C0", "C1", "C2", "C3", "C4", "C5"};
+  const char 		*rowTitles[] = {"a", "b", "c", "d", "e", "f"};
+  const char 		*columnTitles[] = {"a", "b", "c", "d", "e", "f"};
   int		boxWidths[] = {BOX_WIDTH, BOX_WIDTH, BOX_WIDTH, BOX_WIDTH, BOX_WIDTH, BOX_WIDTH};
   int		boxTypes[] = {vMIXED, vMIXED, vMIXED, vMIXED,  vMIXED,  vMIXED};
 
@@ -65,10 +77,27 @@ int main()
   /* Display the Matrix */
   drawCDKMatrix(myMatrix, true);
 
+  //reads the header binary file
+  BinaryFileHeader *myHeader = new BinaryFileHeader();
+  ifstream binInfile ("cs3377.bin", ios::in | ios::binary);
+  binInfile.read( (char *)myHeader , sizeof(BinaryFileHeader));
+  binInfile.close();
+
   /*
    * Dipslay a message
    */
-  setCDKMatrixCell(myMatrix, 2, 2, "Test Message");
+  char Magic  [50];
+  char Version [50];
+  char NumRecords [50];
+  sprintf(Magic,"%#X", myHeader->magicNumber);
+  sprintf(Version,"%u",myHeader->versionNumber);
+  sprintf(NumRecords, "%u", myHeader->numRecords);
+  std::string box1 = std::string("Magic: ") + Magic;
+  std::string box2 = std::string("Version: ") + Version;
+  std::string box3 = std::string("NumRecords: ") + NumRecords;
+  setCDKMatrixCell(myMatrix, 1, 1, box1.c_str());
+  setCDKMatrixCell(myMatrix, 1, 2, box2.c_str());
+  setCDKMatrixCell(myMatrix, 1, 3, box3.c_str());
   drawCDKMatrix(myMatrix, true);    /* required  */
 
   /* So we can see results, pause until a key is pressed. */
