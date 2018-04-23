@@ -1,11 +1,9 @@
 /*
- * Usage of CDK Matrix
- *
- * File:   example1.cc
- * Author: Stephen Perkins
- * Email:  stephen.perkins@utdallas.edu
- */
-
+*
+* Author: Carlos Esponda
+* NetID; Cfe160030
+* section: .502
+*/
 #include <iostream>
 #include <fstream>
 #include <iomanip>
